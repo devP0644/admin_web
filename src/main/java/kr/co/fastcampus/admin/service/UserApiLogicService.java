@@ -2,6 +2,7 @@ package kr.co.fastcampus.admin.service;
 
 import kr.co.fastcampus.admin.ifs.CrudInterface;
 import kr.co.fastcampus.admin.model.entity.User;
+import kr.co.fastcampus.admin.model.enumclass.UserStatus;
 import kr.co.fastcampus.admin.model.network.Header;
 import kr.co.fastcampus.admin.model.network.request.UserApiRequest;
 import kr.co.fastcampus.admin.model.network.response.UserApiResponse;
@@ -30,7 +31,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
         User user = User.builder()
                 .account(userApiRequest.getAccount())
                 .password(userApiRequest.getPassword())
-                .status("REGISTERED")
+                .status(UserStatus.REGISTERED)
                 .phoneNumber(userApiRequest.getPhoneNumber())
                 .email(userApiRequest.getEmail())
                 .registeredAt(LocalDateTime.now())

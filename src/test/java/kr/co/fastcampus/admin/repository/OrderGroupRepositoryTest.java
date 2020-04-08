@@ -1,6 +1,9 @@
 package kr.co.fastcampus.admin.repository;
 
 import kr.co.fastcampus.admin.model.entity.OrderGroup;
+import kr.co.fastcampus.admin.model.enumclass.OrderStatus;
+import kr.co.fastcampus.admin.model.enumclass.OrderType;
+import kr.co.fastcampus.admin.model.enumclass.PaymentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,11 +21,11 @@ class OrderGroupRepositoryTest extends  AdminUserRepositoryTest{
     public void create() {
         OrderGroup orderGroup = new OrderGroup();
 
-        orderGroup.setStatus("COMPLETE");
-        orderGroup.setOrderType("ALL");
+        orderGroup.setStatus(OrderStatus.COMPLETE);
+        orderGroup.setOrderType(OrderType.ALL);
         orderGroup.setRevAddress("서울시 강남구");
         orderGroup.setRevName("홍길동");
-        orderGroup.setPaymentType("CARD");
+        orderGroup.setPaymentType(PaymentType.CARD);
         orderGroup.setTotalPrice(new BigDecimal(900000));
         orderGroup.setTotalQuantity(1);
         orderGroup.setOrderAt(LocalDateTime.now().minusDays(2));

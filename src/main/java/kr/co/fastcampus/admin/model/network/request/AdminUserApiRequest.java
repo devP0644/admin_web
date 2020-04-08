@@ -1,5 +1,6 @@
 package kr.co.fastcampus.admin.model.network.request;
 
+import kr.co.fastcampus.admin.model.enumclass.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,7 @@ public class AdminUserApiRequest {
 
     private String password;
 
-    private String status;
+    private UserStatus status;
 
     private String role;
 

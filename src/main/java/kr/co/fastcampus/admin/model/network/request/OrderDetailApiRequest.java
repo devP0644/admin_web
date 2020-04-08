@@ -1,5 +1,6 @@
 package kr.co.fastcampus.admin.model.network.request;
 
+import kr.co.fastcampus.admin.model.enumclass.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class OrderDetailApiRequest {
     private Long id;
 
-    private String status;
+    private OrderStatus status;
 
     private LocalDateTime arrivalDate;
 

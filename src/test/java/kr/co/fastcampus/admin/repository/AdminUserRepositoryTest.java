@@ -2,6 +2,7 @@ package kr.co.fastcampus.admin.repository;
 
 import kr.co.fastcampus.admin.AdminApplicationTests;
 import kr.co.fastcampus.admin.model.entity.AdminUser;
+import kr.co.fastcampus.admin.model.enumclass.UserStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,7 +21,7 @@ class AdminUserRepositoryTest extends AdminApplicationTests {
         AdminUser adminUser = AdminUser.builder()
                 .account("Admin03")
                 .password("12345")
-                .status("REGISTERED")
+                .status(UserStatus.REGISTERED)
                 .role("PARTNER")
                 .build();
 

@@ -1,5 +1,8 @@
 package kr.co.fastcampus.admin.model.network.request;
 
+import kr.co.fastcampus.admin.model.enumclass.OrderStatus;
+import kr.co.fastcampus.admin.model.enumclass.OrderType;
+import kr.co.fastcampus.admin.model.enumclass.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,15 +18,15 @@ import java.time.LocalDateTime;
 public class OrderGroupApiRequest {
     private Long id;
 
-    private String status;
+    private OrderStatus status;
 
-    private String orderType;
+    private OrderType orderType;
 
     private String revAddress;
 
     private String revName;
 
-    private String paymentType;
+    private PaymentType paymentType;
 
     private BigDecimal totalPrice;
 

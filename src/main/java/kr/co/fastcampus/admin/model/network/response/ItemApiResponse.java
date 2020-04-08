@@ -1,12 +1,12 @@
 package kr.co.fastcampus.admin.model.network.response;
 
+import kr.co.fastcampus.admin.model.enumclass.ItemStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class ItemApiResponse {
     private Long id;
 
-    private String status;
+    private ItemStatus status;
 
     private String name;
 

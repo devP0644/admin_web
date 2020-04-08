@@ -1,6 +1,7 @@
 package kr.co.fastcampus.admin.repository;
 
 import kr.co.fastcampus.admin.model.entity.OrderDetail;
+import kr.co.fastcampus.admin.model.enumclass.OrderStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,7 +19,7 @@ class OrderDetailRepositoryTest extends AdminUserRepositoryTest {
     public void create() {
         OrderDetail orderDetail = new OrderDetail();
 
-        orderDetail.setStatus("WAITING");
+        orderDetail.setStatus(OrderStatus.WAITING);
         orderDetail.setArrivalDate(LocalDateTime.now().plusDays(2));
         orderDetail.setQuantity(new BigDecimal(1));
         orderDetail.setTotalPrice(new BigDecimal(900000));

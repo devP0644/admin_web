@@ -1,5 +1,6 @@
 package kr.co.fastcampus.admin.model.entity;
 
+import kr.co.fastcampus.admin.model.enumclass.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +32,8 @@ public class AdminUser {
 
     private String password;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     private String role;
 

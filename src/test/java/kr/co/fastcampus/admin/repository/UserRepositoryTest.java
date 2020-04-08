@@ -2,6 +2,7 @@ package kr.co.fastcampus.admin.repository;
 
 import kr.co.fastcampus.admin.AdminApplicationTests;
 import kr.co.fastcampus.admin.model.entity.User;
+import kr.co.fastcampus.admin.model.enumclass.UserStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ class UserRepositoryTest extends AdminApplicationTests {
 
         user.setAccount(account);
         user.setPassword(password);
-        user.setStatus(status);
+        user.setStatus(UserStatus.REGISTERED);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setRegisteredAt(registeredAt);

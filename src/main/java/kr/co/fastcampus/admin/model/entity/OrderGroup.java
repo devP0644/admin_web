@@ -1,5 +1,8 @@
 package kr.co.fastcampus.admin.model.entity;
 
+import kr.co.fastcampus.admin.model.enumclass.OrderStatus;
+import kr.co.fastcampus.admin.model.enumclass.OrderType;
+import kr.co.fastcampus.admin.model.enumclass.PaymentType;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -27,15 +30,18 @@ public class OrderGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
-    private String orderType;
+    @Enumerated(EnumType.STRING)
+    private OrderType orderType;
 
     private String revAddress;
 
     private String revName;
 
-    private String paymentType;
+    @Enumerated(EnumType.STRING)
+    private PaymentType paymentType;
 
     private BigDecimal totalPrice;
 

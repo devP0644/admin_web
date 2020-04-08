@@ -1,5 +1,6 @@
 package kr.co.fastcampus.admin.model.network.response;
 
+import kr.co.fastcampus.admin.model.enumclass.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,7 @@ public class AdminUserApiResponse {
 
     private String password;
 
-    private String status;
+    private UserStatus status;
 
     private String role;
 

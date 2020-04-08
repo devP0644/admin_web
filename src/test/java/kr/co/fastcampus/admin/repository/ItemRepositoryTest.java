@@ -1,6 +1,7 @@
 package kr.co.fastcampus.admin.repository;
 
 import kr.co.fastcampus.admin.model.entity.Item;
+import kr.co.fastcampus.admin.model.enumclass.ItemStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +17,7 @@ class ItemRepositoryTest extends AdminUserRepositoryTest{
 
     @Test
     public void create() {
-        String status = "UNREGISTERED";
+        ItemStatus status = ItemStatus.REGISTERED;
         String name = "삼성 노트북";
         String title = "삼성 노트북 A100";
         String content = "2019년형 노트북 입니다.";
