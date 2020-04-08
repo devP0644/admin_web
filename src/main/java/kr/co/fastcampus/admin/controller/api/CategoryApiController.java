@@ -2,6 +2,7 @@ package kr.co.fastcampus.admin.controller.api;
 
 import kr.co.fastcampus.admin.controller.CrudController;
 import kr.co.fastcampus.admin.ifs.CrudInterface;
+import kr.co.fastcampus.admin.model.entity.Category;
 import kr.co.fastcampus.admin.model.network.Header;
 import kr.co.fastcampus.admin.model.network.request.CategoryApiRequest;
 import kr.co.fastcampus.admin.model.network.response.CategoryApiResponse;
@@ -13,13 +14,6 @@ import javax.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/api/category")
-public class CategoryApiController extends CrudController<CategoryApiRequest, CategoryApiResponse> {
+public class CategoryApiController extends CrudController<CategoryApiRequest, CategoryApiResponse, Category> {
 
-    @Autowired
-    CategoryApiLogicService categoryApiLogicService;
-
-    @PostConstruct
-    private void init() {
-        this.baseService = categoryApiLogicService;
-    }
 }

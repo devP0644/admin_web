@@ -2,11 +2,16 @@ package kr.co.fastcampus.admin.controller;
 
 import kr.co.fastcampus.admin.ifs.CrudInterface;
 import kr.co.fastcampus.admin.model.network.Header;
+import kr.co.fastcampus.admin.service.BaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-public class CrudController<req, res> implements CrudInterface<req, res> {
+@Component
+public abstract class CrudController<req, res, Entity> implements CrudInterface<req, res> {
 
-    protected CrudInterface<req, res> baseService;
+    @Autowired(required = false)
+    protected BaseService<req, res, Entity> baseService;
 
     @Override
     @PostMapping("")

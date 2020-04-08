@@ -2,6 +2,7 @@ package kr.co.fastcampus.admin.controller.api;
 
 import kr.co.fastcampus.admin.controller.CrudController;
 import kr.co.fastcampus.admin.ifs.CrudInterface;
+import kr.co.fastcampus.admin.model.entity.Item;
 import kr.co.fastcampus.admin.model.network.Header;
 import kr.co.fastcampus.admin.model.network.request.ItemApiRequest;
 import kr.co.fastcampus.admin.model.network.response.ItemApiResponse;
@@ -13,13 +14,6 @@ import javax.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/api/item")
-public class ItemApiController extends CrudController<ItemApiRequest, ItemApiResponse> {
+public class ItemApiController extends CrudController<ItemApiRequest, ItemApiResponse, Item> {
 
-    @Autowired
-    private ItemApiLogicService itemApiLogicService;
-
-    @PostConstruct
-    private void init() {
-        this.baseService = itemApiLogicService;
-    }
 }

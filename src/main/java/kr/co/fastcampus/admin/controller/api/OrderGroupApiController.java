@@ -2,6 +2,7 @@ package kr.co.fastcampus.admin.controller.api;
 
 import kr.co.fastcampus.admin.controller.CrudController;
 import kr.co.fastcampus.admin.ifs.CrudInterface;
+import kr.co.fastcampus.admin.model.entity.OrderGroup;
 import kr.co.fastcampus.admin.model.network.Header;
 import kr.co.fastcampus.admin.model.network.request.OrderGroupApiRequest;
 import kr.co.fastcampus.admin.model.network.response.OrderGroupApiResponse;
@@ -13,14 +14,6 @@ import javax.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/api/order_group")
-public class OrderGroupApiController extends CrudController<OrderGroupApiRequest, OrderGroupApiResponse> {
-
-    @Autowired
-    private OrderGroupApiLogicService orderGroupApiLogicService;
-
-    @PostConstruct
-    private void init() {
-        this.baseService = orderGroupApiLogicService;
-    }
+public class OrderGroupApiController extends CrudController<OrderGroupApiRequest, OrderGroupApiResponse, OrderGroup> {
 
 }

@@ -14,10 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class UserApiLogicService implements CrudInterface<UserApiRequest, UserApiResponse> {
-
-    @Autowired
-    private UserRepository userRepository;
+public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, User> {
 
 
     //1. requset data
@@ -37,7 +34,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
                 .registeredAt(LocalDateTime.now())
                 .build();
 
-        User newUser = userRepository.save(user);
+        User newUser = baseRepository.save(user);
 
 
 
@@ -46,7 +43,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 
     @Override
     public Header<UserApiResponse> read(Long id) {
-        return userRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(user -> response(user))
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
@@ -55,7 +52,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
     public Header<UserApiResponse> update(Header<UserApiRequest> request) {
         UserApiRequest userApiRequest = request.getData();
 
-        return userRepository.findById(userApiRequest.getId())
+        return baseRepository.findById(userApiRequest.getId())
                 .map(user -> {
                     user.setAccount(userApiRequest.getAccount())
                             .setPassword(userApiRequest.getPassword())
@@ -67,7 +64,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 
                     return user;
                 })
-                .map(user -> userRepository.save(user))//update -> newUser
+                .map(user -> baseRepository.save(user))//update -> newUser
                 .map(updateUser -> response(updateUser))//userApiRespinse
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
@@ -75,10 +72,10 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
     @Override
     public Header delete(Long id) {
 
-        Optional<User> optional = userRepository.findById(id);
+        Optional<User> optional = baseRepository.findById(id);
 
         return optional.map(user -> {
-            userRepository.delete(user);
+            baseRepository.delete(user);
             return Header.OK();
         })
                 .orElseGet(()->Header.ERROR("데이터 없음"));

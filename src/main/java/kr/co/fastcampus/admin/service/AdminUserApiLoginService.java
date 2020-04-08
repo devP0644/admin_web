@@ -8,15 +8,11 @@ import kr.co.fastcampus.admin.model.network.response.AdminUserApiResponse;
 import kr.co.fastcampus.admin.repository.AdminUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
 @Service
-public class AdminUserApiLoginService implements CrudInterface<AdminUserApiRequest, AdminUserApiResponse> {
-
-    @Autowired
-    AdminUserRepository adminUserRepository;
+public class AdminUserApiLoginService extends BaseService<AdminUserApiRequest, AdminUserApiResponse, AdminUser> {
 
     @Override
     public Header<AdminUserApiResponse> create(Header<AdminUserApiRequest> request) {
@@ -34,7 +30,7 @@ public class AdminUserApiLoginService implements CrudInterface<AdminUserApiReque
                 .registeredAt(LocalDateTime.now())
                 .build();
 
-        AdminUser newAdminUser = adminUserRepository.save(adminUser);
+        AdminUser newAdminUser = baseRepository.save(adminUser);
 
         return response(newAdminUser);
     }
@@ -42,7 +38,7 @@ public class AdminUserApiLoginService implements CrudInterface<AdminUserApiReque
 
     @Override
     public Header<AdminUserApiResponse> read(Long id) {
-        return adminUserRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(adminUser->response(adminUser))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
@@ -51,7 +47,7 @@ public class AdminUserApiLoginService implements CrudInterface<AdminUserApiReque
     public Header<AdminUserApiResponse> update(Header<AdminUserApiRequest> request) {
         AdminUserApiRequest adminUserApiRequest = request.getData();
 
-        return adminUserRepository.findById(adminUserApiRequest.getId())
+        return baseRepository.findById(adminUserApiRequest.getId())
                 .map(adminUser -> {
 
                     adminUser.setPassword(adminUserApiRequest.getPassword())
@@ -64,16 +60,16 @@ public class AdminUserApiLoginService implements CrudInterface<AdminUserApiReque
 
                     return adminUser;
                 })
-                .map(adminUser -> adminUserRepository.save(adminUser))
+                .map(adminUser -> baseRepository.save(adminUser))
                 .map(adminUser -> response(adminUser))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
     @Override
     public Header delete(Long id) {
-        return adminUserRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(adminUser -> {
-                    adminUserRepository.delete(adminUser);
+                    baseRepository.delete(adminUser);
                     return Header.OK();
                 })
                 .orElseGet(()->Header.ERROR("데이터 없음"));

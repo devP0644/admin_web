@@ -2,11 +2,9 @@ package kr.co.fastcampus.admin.service;
 
 import kr.co.fastcampus.admin.ifs.CrudInterface;
 import kr.co.fastcampus.admin.model.entity.Item;
-import kr.co.fastcampus.admin.model.entity.User;
 import kr.co.fastcampus.admin.model.network.Header;
 import kr.co.fastcampus.admin.model.network.request.ItemApiRequest;
 import kr.co.fastcampus.admin.model.network.response.ItemApiResponse;
-import kr.co.fastcampus.admin.model.network.response.UserApiResponse;
 import kr.co.fastcampus.admin.repository.ItemRepository;
 import kr.co.fastcampus.admin.repository.PartnerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -14,17 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @Slf4j
-public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemApiResponse> {
+public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResponse, Item> {
 
     @Autowired
     private PartnerRepository partnerRepository;
-
-    @Autowired
-    ItemRepository itemRepository;
 
     @Override
     public Header<ItemApiResponse> create(Header<ItemApiRequest> request) {
@@ -42,14 +36,14 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                 .partner(partnerRepository.getOne(itemApiRequest.getPartnerId()))
                 .build();
 
-        Item newItem = itemRepository.save(item);
+        Item newItem = baseRepository.save(item);
 
         return response(newItem);
     }
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
-        return itemRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(item -> response(item))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
@@ -59,7 +53,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
 
             ItemApiRequest itemApiRequest = request.getData();
 
-                return itemRepository.findById(itemApiRequest.getId())
+                return baseRepository.findById(itemApiRequest.getId())
                     .map(item -> {
                         item.setStatus(itemApiRequest.getStatus())
                                 .setName(itemApiRequest.getName())
@@ -71,7 +65,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                                 .setUnregisteredAt(itemApiRequest.getUnregisteredAt());
                         return item;
                     })
-                    .map(item -> itemRepository.save(item))
+                    .map(item -> baseRepository.save(item))
                     .map(updateItem->response(updateItem))
                     .orElseGet(()->Header.ERROR("데이터 없음"));
     }
@@ -79,9 +73,9 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
     @Override
     public Header delete(Long id) {
 
-        return itemRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(item -> {
-                    itemRepository.delete(item);
+                    baseRepository.delete(item);
                     return Header.OK();
                 })
                 .orElseGet(()->Header.ERROR("데이터 없음"));
