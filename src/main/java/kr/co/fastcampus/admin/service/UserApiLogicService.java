@@ -8,10 +8,14 @@ import kr.co.fastcampus.admin.model.network.request.UserApiRequest;
 import kr.co.fastcampus.admin.model.network.response.UserApiResponse;
 import kr.co.fastcampus.admin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, User> {
@@ -20,6 +24,7 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
     //1. requset data
     //2. user 생성
     //3. 생성된 데이터 -> UserApiResponse return
+
     @Override
     public Header<UserApiResponse> create(Header<UserApiRequest> request) {
 
@@ -38,13 +43,14 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
 
 
 
-        return response(newUser);
+        return Header.OK(response(newUser));
     }
 
     @Override
     public Header<UserApiResponse> read(Long id) {
         return baseRepository.findById(id)
                 .map(user -> response(user))
+                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
@@ -66,6 +72,7 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 })
                 .map(user -> baseRepository.save(user))//update -> newUser
                 .map(updateUser -> response(updateUser))//userApiRespinse
+                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
@@ -81,7 +88,22 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
-    private Header<UserApiResponse> response(User user) {
+//    private Header<UserApiResponse> response(User user) {
+//        UserApiResponse userApiResponse = UserApiResponse.builder()
+//                .id(user.getId())
+//                .account(user.getAccount())
+//                .password(user.getPassword())
+//                .email(user.getEmail())
+//                .phoneNumber(user.getPhoneNumber())
+//                .status(user.getStatus())
+//                .registeredAt(user.getRegisteredAt())
+//                .unregisteredAt(user.getUnregisteredAt())
+//                .build();
+//
+//        return Header.OK(userApiResponse);
+//    }
+    @Override
+    public UserApiResponse response(User user) {
         UserApiResponse userApiResponse = UserApiResponse.builder()
                 .id(user.getId())
                 .account(user.getAccount())
@@ -93,6 +115,6 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .unregisteredAt(user.getUnregisteredAt())
                 .build();
 
-        return Header.OK(userApiResponse);
+        return userApiResponse;
     }
 }

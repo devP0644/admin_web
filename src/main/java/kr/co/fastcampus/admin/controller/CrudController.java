@@ -4,8 +4,11 @@ import kr.co.fastcampus.admin.ifs.CrudInterface;
 import kr.co.fastcampus.admin.model.network.Header;
 import kr.co.fastcampus.admin.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Component
 public abstract class CrudController<req, res, Entity> implements CrudInterface<req, res> {
@@ -36,4 +39,8 @@ public abstract class CrudController<req, res, Entity> implements CrudInterface<
     public Header delete(@PathVariable Long id) {
         return baseService.delete(id);
     }
+
+    @Override
+    @GetMapping("")
+    public Header<List<res>> search(Pageable pageable) {return baseService.search(pageable);}
 }

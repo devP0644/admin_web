@@ -7,9 +7,12 @@ import kr.co.fastcampus.admin.model.network.request.AdminUserApiRequest;
 import kr.co.fastcampus.admin.model.network.response.AdminUserApiResponse;
 import kr.co.fastcampus.admin.repository.AdminUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class AdminUserApiLoginService extends BaseService<AdminUserApiRequest, AdminUserApiResponse, AdminUser> {
@@ -32,7 +35,7 @@ public class AdminUserApiLoginService extends BaseService<AdminUserApiRequest, A
 
         AdminUser newAdminUser = baseRepository.save(adminUser);
 
-        return response(newAdminUser);
+        return Header.OK(response(newAdminUser));
     }
 
 
@@ -40,6 +43,7 @@ public class AdminUserApiLoginService extends BaseService<AdminUserApiRequest, A
     public Header<AdminUserApiResponse> read(Long id) {
         return baseRepository.findById(id)
                 .map(adminUser->response(adminUser))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -62,6 +66,7 @@ public class AdminUserApiLoginService extends BaseService<AdminUserApiRequest, A
                 })
                 .map(adminUser -> baseRepository.save(adminUser))
                 .map(adminUser -> response(adminUser))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -75,7 +80,8 @@ public class AdminUserApiLoginService extends BaseService<AdminUserApiRequest, A
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
-    private Header<AdminUserApiResponse> response(AdminUser AdminUser) {
+    @Override
+    public AdminUserApiResponse response(AdminUser AdminUser) {
         AdminUserApiResponse adminUserApiResponse = AdminUserApiResponse.builder()
                 .id(AdminUser.getId())
                 .account(AdminUser.getAccount())
@@ -89,6 +95,6 @@ public class AdminUserApiLoginService extends BaseService<AdminUserApiRequest, A
                 .unregisteredAt(AdminUser.getUnregisteredAt())
                 .build();
 
-        return Header.OK(adminUserApiResponse);
+        return adminUserApiResponse;
     }
 }

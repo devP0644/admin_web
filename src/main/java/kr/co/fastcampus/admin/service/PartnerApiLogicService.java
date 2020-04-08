@@ -8,9 +8,11 @@ import kr.co.fastcampus.admin.model.network.response.PartnerApiResponse;
 import kr.co.fastcampus.admin.repository.CategoryRepository;
 import kr.co.fastcampus.admin.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PartnerApiLogicService extends BaseService<PartnerApiRequest, PartnerApiResponse, Partner> {
@@ -37,13 +39,14 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
 
         Partner newPartner = baseRepository.save(partner);
 
-        return response(newPartner);
+        return Header.OK(response(newPartner));
     }
 
     @Override
     public Header<PartnerApiResponse> read(Long id) {
         return baseRepository.findById(id)
                 .map(partner -> response(partner))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -65,6 +68,7 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
                 })
                 .map(partner -> baseRepository.save(partner))
                 .map(partner -> response(partner))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -79,7 +83,7 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
-    private Header<PartnerApiResponse> response(Partner partner) {
+    public PartnerApiResponse response(Partner partner) {
         PartnerApiResponse partnerApiResponse = PartnerApiResponse.builder()
                 .id(partner.getId())
                 .name(partner.getName())
@@ -94,6 +98,6 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
                 .categoryId(partner.getCategory().getId())
                 .build();
 
-        return Header.OK(partnerApiResponse);
+        return partnerApiResponse;
     }
 }

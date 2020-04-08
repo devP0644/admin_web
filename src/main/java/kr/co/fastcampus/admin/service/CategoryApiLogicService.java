@@ -7,7 +7,10 @@ import kr.co.fastcampus.admin.model.network.request.CategoryApiRequest;
 import kr.co.fastcampus.admin.model.network.response.CategoryApiResponse;
 import kr.co.fastcampus.admin.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryApiLogicService extends BaseService<CategoryApiRequest, CategoryApiResponse, Category> {
@@ -24,13 +27,14 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 
         Category newCategory = baseRepository.save(category);
 
-        return response(newCategory);
+        return Header.OK(response(newCategory));
     }
 
     @Override
     public Header<CategoryApiResponse> read(Long id) {
         return baseRepository.findById(id)
                 .map(category -> response(category))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -48,6 +52,7 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
                 })
                 .map(category -> baseRepository.save(category))
                 .map(category -> response(category))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -61,7 +66,8 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
-    private Header<CategoryApiResponse> response(Category category) {
+    @Override
+    public CategoryApiResponse response(Category category) {
 
         CategoryApiResponse categoryApiResponse = CategoryApiResponse.builder()
                 .id(category.getId())
@@ -69,6 +75,11 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
                 .title(category.getTitle())
                 .build();
 
-        return Header.OK(categoryApiResponse);
+        return categoryApiResponse;
+    }
+
+    @Override
+    public Header<List<CategoryApiResponse>> search(Pageable pageable) {
+        return null;
     }
 }

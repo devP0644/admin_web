@@ -9,7 +9,10 @@ import kr.co.fastcampus.admin.repository.ItemRepository;
 import kr.co.fastcampus.admin.repository.OrderDetailRepository;
 import kr.co.fastcampus.admin.repository.OrderGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class OrderDetailApiLogicService extends BaseService<OrderDetailApiRequest, OrderDetailApiResponse, OrderDetail> {
@@ -33,13 +36,14 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
 
         OrderDetail newOrderDetail = baseRepository.save(orderDetail);
 
-        return response(newOrderDetail);
+        return Header.OK(response(newOrderDetail));
     }
 
     @Override
     public Header<OrderDetailApiResponse> read(Long id) {
         return baseRepository.findById(id)
                 .map(orderDetail -> response(orderDetail))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -58,6 +62,7 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
                 })
                 .map(orderDetail -> baseRepository.save(orderDetail))
                 .map(updateOrderDetail -> response(updateOrderDetail))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -71,7 +76,7 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
                 .orElseGet(()-> Header.ERROR("데이터 없음"));
     }
 
-    private Header<OrderDetailApiResponse> response(OrderDetail orderDetail) {
+    public OrderDetailApiResponse response(OrderDetail orderDetail) {
         OrderDetailApiResponse orderDetailApiResponse = OrderDetailApiResponse.builder()
                 .id(orderDetail.getId())
                 .status(orderDetail.getStatus())
@@ -82,7 +87,6 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
                 .itemId(orderDetail.getItem().getId())
                 .build();
 
-        return Header.OK(orderDetailApiResponse);
+        return orderDetailApiResponse;
     }
-
 }

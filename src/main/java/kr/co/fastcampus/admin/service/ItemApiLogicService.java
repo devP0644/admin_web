@@ -9,9 +9,11 @@ import kr.co.fastcampus.admin.repository.ItemRepository;
 import kr.co.fastcampus.admin.repository.PartnerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -38,13 +40,14 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
 
         Item newItem = baseRepository.save(item);
 
-        return response(newItem);
+        return Header.OK(response(newItem));
     }
 
     @Override
     public Header<ItemApiResponse> read(Long id) {
         return baseRepository.findById(id)
                 .map(item -> response(item))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -67,6 +70,7 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
                     })
                     .map(item -> baseRepository.save(item))
                     .map(updateItem->response(updateItem))
+                        .map(Header::OK)
                     .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -81,7 +85,7 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
-    private Header<ItemApiResponse> response(Item item) {
+    public ItemApiResponse response(Item item) {
         ItemApiResponse itemApiResponse = ItemApiResponse.builder()
                 .id(item.getId())
                 .status(item.getStatus())
@@ -95,6 +99,6 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
                 .partnerId(item.getPartner().getId())
                 .build();
 
-        return Header.OK(itemApiResponse);
+        return itemApiResponse;
     }
 }

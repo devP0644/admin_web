@@ -8,8 +8,10 @@ import kr.co.fastcampus.admin.model.network.response.OrderGroupApiResponse;
 import kr.co.fastcampus.admin.repository.OrderGroupRepository;
 import kr.co.fastcampus.admin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,7 +39,7 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
 
         OrderGroup newOrderGroup = baseRepository.save(orderGroup);
 
-        return response(newOrderGroup);
+        return Header.OK(response(newOrderGroup));
     }
 
     @Override
@@ -45,6 +47,7 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
 
         return baseRepository.findById(id)
                 .map(orderGroup -> response(orderGroup))
+                .map(Header::OK)
                 .orElseGet(()-> Header.ERROR("데이터 없음"));
     }
 
@@ -68,6 +71,7 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
                 })
                 .map(orderGroup -> baseRepository.save(orderGroup))
                 .map(orderGroup -> response(orderGroup))
+                .map(Header::OK)
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -85,7 +89,7 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
 
     }
 
-    private Header<OrderGroupApiResponse> response(OrderGroup orderGroup) {
+    public OrderGroupApiResponse response(OrderGroup orderGroup) {
         OrderGroupApiResponse orderGroupApiResponse = OrderGroupApiResponse.builder()
                 .id(orderGroup.getId())
                 .status(orderGroup.getStatus())
@@ -100,6 +104,6 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
                 .userId(orderGroup.getId())
                 .build();
 
-        return Header.OK(orderGroupApiResponse);
+        return orderGroupApiResponse;
     }
 }
