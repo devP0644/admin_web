@@ -1,11 +1,12 @@
 package kr.co.fastcampus.admin.service;
 
 import kr.co.fastcampus.admin.ifs.CrudInterface;
+import kr.co.fastcampus.admin.model.entity.OrderGroup;
 import kr.co.fastcampus.admin.model.entity.User;
 import kr.co.fastcampus.admin.model.enumclass.UserStatus;
 import kr.co.fastcampus.admin.model.network.Header;
 import kr.co.fastcampus.admin.model.network.request.UserApiRequest;
-import kr.co.fastcampus.admin.model.network.response.UserApiResponse;
+import kr.co.fastcampus.admin.model.network.response.*;
 import kr.co.fastcampus.admin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, User> {
 
+    @Autowired
+    private OrderGroupApiLogicService orderGroupApiLogicService;
+
+    @Autowired
+    private ItemApiLogicService itemApiLogicService;
 
     //1. requset data
     //2. user 생성
@@ -116,5 +122,36 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .build();
 
         return userApiResponse;
+    }
+
+    public Header<UserOderInfoApiReponse> orderInfo(Long id) {
+
+        User user = baseRepository.getOne(id);
+        UserApiResponse userApiResponse = response(user);
+
+        List<OrderGroup> orderGroupList = user.getOrderGroupList();
+
+        List<OrderGroupApiResponse> orderGroupApiResponseList = orderGroupList.stream()
+                .map(orderGroup -> {
+                    OrderGroupApiResponse orderGroupApiResponse = Header.OK(orderGroupApiLogicService.response(orderGroup)).getData();
+
+                    List<ItemApiResponse> itemApiResponsesList = orderGroup.getOrderDetailList().stream()
+                            .map(orderDetail -> orderDetail.getItem())
+                            .map(item -> Header.OK(itemApiLogicService.response(item)).getData())
+                            .collect(Collectors.toList());
+
+                    orderGroupApiResponse.setItemApiResponseList(itemApiResponsesList);
+
+                    return orderGroupApiResponse;
+                })
+                .collect(Collectors.toList());
+
+        userApiResponse.setOrderGroupApiResponseList(orderGroupApiResponseList);
+
+        UserOderInfoApiReponse userOderInfoApiReponse = UserOderInfoApiReponse.builder()
+                .userApiResponse(userApiResponse)
+                .build();
+
+        return Header.OK(userOderInfoApiReponse);
     }
 }

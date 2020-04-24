@@ -40,7 +40,7 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
 
         Item newItem = baseRepository.save(item);
 
-        return Header.OK(response(newItem));
+        return Header.OK(response(newItem)  );
     }
 
     @Override

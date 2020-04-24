@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
+import javax.sound.midi.SoundbankResource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,11 +24,11 @@ public abstract class BaseService<req, res, Entity> implements CrudInterface<req
     public Header<List<res>> search(Pageable pageable) {
         Page<Entity> entitys = baseRepository.findAll(pageable);
 
-        List<res> userApiResponseList = entitys.stream()
+        List<res> entityApiResponseList = entitys.stream()
                 .map(entity -> this.response(entity))
                 .collect(Collectors.toList());
 
-        return Header.OK(userApiResponseList);
+        return Header.OK(entityApiResponseList);
     }
 
     public abstract res response(Entity entity);

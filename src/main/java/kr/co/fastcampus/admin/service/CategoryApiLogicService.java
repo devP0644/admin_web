@@ -77,9 +77,4 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 
         return categoryApiResponse;
     }
-
-    @Override
-    public Header<List<CategoryApiResponse>> search(Pageable pageable) {
-        return null;
-    }
 }
